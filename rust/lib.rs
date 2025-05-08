@@ -121,7 +121,6 @@ macro_rules! impl_display_signed {
                                 fn format(&self, f: &mut dyn Fmt) -> Result<()> {
                                         let mut buf = [0u8; 64];
                                         let len = i128_as_str((*self) as i128, &mut buf, 10);
-                                        unsafe { ffi::write(2, "i32write\n".as_ptr(), 9); }
                                         unsafe { f.append(from_utf8_unchecked(&buf[0..len]) ) }
                                 }
                         }
