@@ -7,7 +7,7 @@ use error::*;
 use result::Result;
 
 pub trait Fmt {
-    fn append(&mut self, s: &str, len: usize) -> Result<()>;
+    fn append(&mut self, s: &str) -> Result<()>;
     fn to_str(&self) -> &str;
 }
 
