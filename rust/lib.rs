@@ -6,23 +6,23 @@ extern crate result;
 use error::*;
 use result::Result;
 
-pub trait Formatter {
+pub trait Fmt {
     fn append(&mut self, s: &str, len: usize) -> Result<()>;
     fn to_str(&self) -> &str;
 }
 
 pub trait Display {
-    fn format(&self, f: &mut dyn Formatter) -> Result<()>;
+    fn format(&self, f: &mut dyn Fmt) -> Result<()>;
 }
 
 impl Display for Error {
-    fn format(&self, f: &mut dyn Formatter) -> Result<()> {
+    fn format(&self, f: &mut dyn Fmt) -> Result<()> {
         Ok(())
     }
 }
 
 impl Display for Backtrace {
-    fn format(&self, f: &mut dyn Formatter) -> Result<()> {
+    fn format(&self, f: &mut dyn Fmt) -> Result<()> {
         Ok(())
     }
 }
