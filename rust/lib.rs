@@ -7,8 +7,8 @@ use error::*;
 use result::Result;
 
 pub trait Formatter {
-    fn write_str(&mut self, s: &str, len: usize) -> Result<()>;
-    fn as_str(&self) -> &str;
+    fn append(&mut self, s: &str, len: usize) -> Result<()>;
+    fn to_str(&self) -> &str;
 }
 
 pub trait Display {
