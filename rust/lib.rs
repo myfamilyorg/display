@@ -26,3 +26,9 @@ impl Display for Backtrace {
         Ok(())
     }
 }
+
+impl Display for &str {
+    fn format(&self, f: &mut dyn Fmt) -> Result<()> {
+        f.append(self)
+    }
+}
