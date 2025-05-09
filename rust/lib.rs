@@ -1,6 +1,7 @@
 #![no_std]
 
 extern crate ffi;
+use core::slice::from_raw_parts;
 use core::str::from_utf8_unchecked;
 
 pub fn u128_as_str(mut n: u128, offset: usize, buf: &mut [u8], base: u8) -> usize {
@@ -74,12 +75,20 @@ pub trait Display {
 
 impl Display for Error {
     fn format(&self, f: &mut dyn Fmt) -> Result<()> {
-        Ok(())
-    }
-}
+        f.append(self.display())?;
+        f.append("\n")?;
+        unsafe {
+            let ptr = self.bt_as_ptr();
+            let len = ffi::cstring_len(ptr);
+            if len > 0 {
+                let slice = from_raw_parts(ptr, len as usize);
+                let s = from_utf8_unchecked(slice);
+                let res = f.append(s);
+                ffi::release(ptr);
+                res?;
+            }
+        }
 
-impl Display for Backtrace {
-    fn format(&self, f: &mut dyn Fmt) -> Result<()> {
         Ok(())
     }
 }
