@@ -81,7 +81,7 @@ impl Display for Error {
         unsafe {
             let ptr = self.bt_as_ptr();
             if ptr.is_null() {
-                f.append("Backtrace disabled. To enable export RUST_BACKTRACE=1.\n")?;
+                f.append("Backtrace disabled. To enable export RUST_BACKTRACE=1.")?;
             } else {
                 let len = ffi::cstring_len(ptr);
                 if len > 0 {
