@@ -75,17 +75,22 @@ pub trait Display {
 
 impl Display for Error {
     fn format(&self, f: &mut dyn Fmt) -> Result<()> {
+        f.append("ErrorKind=[")?;
         f.append(self.display())?;
-        f.append("\n")?;
+        f.append("]\n")?;
         unsafe {
             let ptr = self.bt_as_ptr();
-            let len = ffi::cstring_len(ptr);
-            if len > 0 {
-                let slice = from_raw_parts(ptr, len as usize);
-                let s = from_utf8_unchecked(slice);
-                let res = f.append(s);
-                ffi::release(ptr);
-                res?;
+            if ptr.is_null() {
+                f.append("Backtrace disabled. To enable export RUST_BACKTRACE=1.\n")?;
+            } else {
+                let len = ffi::cstring_len(ptr);
+                if len > 0 {
+                    let slice = from_raw_parts(ptr, len as usize);
+                    let s = from_utf8_unchecked(slice);
+                    let res = f.append(s);
+                    ffi::release(ptr);
+                    res?;
+                }
             }
         }
 
